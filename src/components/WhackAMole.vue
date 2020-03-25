@@ -42,6 +42,7 @@ export default {
             interval: this.$DEFAULT_INTERVAL,
             counter: 0,
             itemCount: 1,
+            items: [],
         }
     },
 
@@ -93,23 +94,36 @@ export default {
                 this.$emit('changeState', 'end');
 
             } else {
-
-                let arrIndex = [];
-                let i = 0;
-                while(i < freelist.length) {
-                    arrIndex.push(i);
-                    i++;
-                }
-                Lib.shuffleArray(arrIndex);
                 
-                i = 0;
-                while(i < this.itemCount) {                    
-                    const select = arrIndex[i];
+                this.items = [];
+                let flag = false;
+
+                while(!flag) {
+                    
+                    const select = Lib.getRandomInt(0, freelist.length - 1);
                     const index = freelist[select].index;
-                    this.itemList[index].state = 1;
-                    this.$refs['item' + index][0].showPanel();
-                    i++;
+                    
+                    if(this.items.length === 0) {
+                        
+                        this.items.push(index);
+                    
+                    } else {
+                        
+                        if(this.items.some((item) => {
+                            
+                            return item !== index
+                        
+                        })) {
+                            
+                            this.items.push(index);
+                        
+                        }
+
+                    }
+                    if(this.items.length === this.itemCount) flag = true;
                 }
+
+                this.showItem();
                 
                 if((this.counter % 30) === 0) {
                     this.itemCount++;
@@ -120,12 +134,27 @@ export default {
                 }
 
                 this.timer = setTimeout(() => {
+
                     this.doGame()
+                
                 }, this.interval)
 
             }
-
             
+        },
+
+        showItem() {
+            if(this.items.length === 0) return;
+
+            const index = this.items.pop();
+            this.itemList[index].state = 1;
+            this.$refs['item' + index][0].showPanel();
+
+            setTimeout(() => {
+
+                this.showItem()
+
+            }, 50)
         },
 
         handleHide(n) {
