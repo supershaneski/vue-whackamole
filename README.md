@@ -5,10 +5,12 @@ This project was bootstrapped with [Vue CLI](https://cli.vuejs.org/).
 
 ## Objective
 This is my second [Vue.Js](https://vuejs.org/) project so far as I continue my study.
-I wanted to make a more challenging application.
+I wanted to make a more challenging application to practice.
 
 ## Description
 This is an app like the Whac-A-Mole arcade game.
+
+![Screenshot](docs/screenshot.png)
 
 * The speed changes as the game progresses.
 * The number of moles appearing also increases.
